@@ -35,7 +35,7 @@ const router = express.Router();
 router.post('/', (req, res, next) => {
     uploadSingle(req, res, (err) => { // call as a normal function
       if (err) {
-        console.log(err)
+        console.log('[TEST]',err)
         return res.status(400).send({success: false, message: "Only Images are allowed!"});;
       }
 

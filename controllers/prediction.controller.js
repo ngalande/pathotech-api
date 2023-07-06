@@ -46,18 +46,19 @@ var cs = [
 
 exports.makePredictions = async (req, res, next) => {
     const imagePath = `./public/images/${req && req['filename']}`;
+    const modelPath = path.join(__dirname,'..', 'savedModels')
     try {
       const loadModel = async (img) => {
         const output = {};
         // laod model
         console.log('Loading.......')
-        const model = await tf.node.loadSavedModel(path.join(__dirname,'..', 'SavedModels'));
+        const model = await tf.node.loadSavedModel(modelPath);
         // classify
         // output.predictions = await model.predict(img).data();
         let predictions = await model.predict(img).data();
-        let predictions2 = await model.predict(img).data()
+        // let predictions2 = await model.predict(img).data()
         // let pred_class = tf.argMax(predictions, axis=1)
-        // console.log('[My Data] ',predictions2)
+        // console.log('[My Data] ',predictions)
         predictions = Array.from(predictions)
                             .map((prob, idx) => {
                                 
@@ -109,7 +110,8 @@ exports.makePredictions = async (req, res, next) => {
             const input = batchedImage.toFloat().div(tf.scalar(255));
             await loadModel(input);
             // delete image file
-            fs.unlinkSync(imagePath, (error) => {
+            // fs.unlink(imagePath)
+            fs.unlink(imagePath, (error) => {
             if (error) {
                 console.error(error);
             }
