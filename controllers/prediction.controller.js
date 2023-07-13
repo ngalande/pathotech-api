@@ -63,7 +63,7 @@ exports.makePredictions = async (req, res, next) => {
                             .map((prob, idx) => {
                                 
                                 // console.log('[Mine]',prob)
-                                return {class: cs[idx], probability: prob}
+                                return {class: cs[idx], probability: prob, index: idx}
                             })
                             .sort((a, b) => b.probability - a.probability)[0];
         output.success = true;
