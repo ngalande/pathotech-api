@@ -63,12 +63,13 @@ exports.makePredictions = async (req, res, next) => {
                             .map((prob, idx) => {
                                 
                                 // console.log('[Mine]',prob)
-                                return {class: cs[idx], probability: prob}
+                                return {class: cs[idx], probability: prob, index: idx}
                             })
                             .sort((a, b) => b.probability - a.probability)[0];
         output.success = true;
         output.message = `Success.`;
         output.predictions = predictions;
+        // output.index = 
         res.statusCode = 200;
         res.json(output);
       };
@@ -108,6 +109,7 @@ exports.makePredictions = async (req, res, next) => {
             const resizedImage = tensor.resizeNearestNeighbor([newHeight, newWidth]);
             const batchedImage = resizedImage.expandDims(0)
             const input = batchedImage.toFloat().div(tf.scalar(255));
+            console.log('hello',input)
             await loadModel(input);
             // delete image file
             // fs.unlink(imagePath)
@@ -117,7 +119,8 @@ exports.makePredictions = async (req, res, next) => {
             }
             });
         } catch (error) {
-            res.status(500).json({message: "Internal Server Error!"});   
+          // console.log(error)
+            res.status(500).json({message: "Internal Server Errors!"});   
         }
       });
     } catch (error) {
